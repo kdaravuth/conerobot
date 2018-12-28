@@ -205,7 +205,7 @@ public class PaymentReversalConstruct {
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
-			LOGGER.log(Level.INFO, "Reversal Payment Details --> ");
+			LOGGER.log(Level.INFO, "Reversal Payment Details --> " + trackingID);
 
 			File xmlresponse = new File("src\\input\\PaymentReversalResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
@@ -248,8 +248,8 @@ public class PaymentReversalConstruct {
 
 			}
 
-			LOGGER.log(Level.INFO, "<-- End Payment Reversal Details");
-
+			LOGGER.log(Level.INFO, "<-- End Payment Reversal Details " + trackingID);
+			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 
 			LOGGER.log(Level.SEVERE, e.toString());

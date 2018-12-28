@@ -39,12 +39,12 @@ import org.w3c.dom.NodeList;
  *
  */
 public class SubscriberRetrieveConstruct {
-	
-	//private static final Logger LOGGER = Logger.getLogger( SubscriberRetrieveConstruct.class.getName());
+
+	// private static final Logger LOGGER = Logger.getLogger(
+	// SubscriberRetrieveConstruct.class.getName());
 	private static Logger LOGGER = null;
 	static {
-		
-		
+
 		try {
 
 			InputStream configFile = SubscriberRetrieveConstruct.class.getResourceAsStream("/config/logger.cfg");
@@ -53,158 +53,186 @@ public class SubscriberRetrieveConstruct {
 		} catch (IOException e) {
 			e.getMessage();
 		}
-		
+
 	}
-	
+
 	public static String realm = "";
 	public static String username = "";
 	public static String token = "";
-	//read credential
-	public void retreiveCred (File filepath) {
-	
+
+	// read credential
+	public void retreiveCred(File filepath) {
+
 		try {
-			
-			BufferedReader  bfcred = new BufferedReader(new FileReader(filepath));
-			List <String> lines = new ArrayList<String>();
+
+			BufferedReader bfcred = new BufferedReader(new FileReader(filepath));
+			List<String> lines = new ArrayList<String>();
 			String line;
-			
-			while ((line = bfcred.readLine())!= null){
+
+			while ((line = bfcred.readLine()) != null) {
 				lines.add(line);
 			}
 			realm = lines.get(0);
-			LOGGER.log( Level.INFO,"Retrieving realm..."); 
-			
+			LOGGER.log(Level.INFO, "Retrieving realm...");
+
 			username = lines.get(1);
-			LOGGER.log( Level.INFO,"Retrieving username...");
-			
+			LOGGER.log(Level.INFO, "Retrieving username...");
+
 			token = lines.get(2);
-			LOGGER.log( Level.INFO,"Retrieving token...");
-			
+			LOGGER.log(Level.INFO, "Retrieving token...");
+
 			bfcred.close();
-			
-			}catch (Exception e) {
-				LOGGER.log( Level.SEVERE, "Retrieving credential fails "+ e);
-			}
+
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Retrieving credential fails " + e);
+		}
 	}
+
 	private static void createSoapEnvelope(SOAPMessage soapMessage, String MSISDN) throws SOAPException {
-        SOAPPart soapPart = soapMessage.getSOAPPart();
+		SOAPPart soapPart = soapMessage.getSOAPPart();
 
-        String myNamespace = "com";
-        String myNamespaceURI = "http://www.comverse.com";
+		String myNamespace = "com";
+		String myNamespaceURI = "http://www.comverse.com";
 
-        // SOAP Envelope
-        SOAPEnvelope envelope = soapPart.getEnvelope();
-        envelope.addNamespaceDeclaration(myNamespace, myNamespaceURI);
+		// SOAP Envelope
+		SOAPEnvelope envelope = soapPart.getEnvelope();
+		envelope.addNamespaceDeclaration(myNamespace, myNamespaceURI);
 
-        SOAPBody c1soapBody = envelope.getBody();
-        SOAPElement c1soapBodySubscriberRetrieve = c1soapBody.addChildElement("SubscriberRetrieve", myNamespace);
-        SOAPElement c1soapBodyInput = c1soapBodySubscriberRetrieve.addChildElement("input", myNamespace);
-        SOAPElement c1soapBodyuserIdName = c1soapBodyInput.addChildElement("userIdName");
-        c1soapBodyuserIdName.addTextNode(username);
-        SOAPElement c1soapBodysecurityToken = c1soapBodyInput.addChildElement("securityToken");
-        c1soapBodysecurityToken.addTextNode(token);
-        SOAPElement c1soapBodysubscriberId = c1soapBodyInput.addChildElement("subscriberId");
-        SOAPElement c1soapBodysubscriberId2 = c1soapBodysubscriberId.addChildElement("subscriberId");
-        SOAPElement c1soapBodysubscriberId2value = c1soapBodysubscriberId2.addChildElement("value");
-        c1soapBodysubscriberId2value.addTextNode(MSISDN);
-        SOAPElement  c1soapBodysubscriberExternalIdType = c1soapBodysubscriberId.addChildElement("subscriberExternalIdType");
-        SOAPElement  c1soapBodysubscriberExternalIdTypeValue = c1soapBodysubscriberExternalIdType.addChildElement("value");
-        c1soapBodysubscriberExternalIdTypeValue.addTextNode("1");
-        SOAPElement c1soapBodyinfo = c1soapBodyInput.addChildElement("info");
-        
-        SOAPElement c1soapuseBillingDB = c1soapBodyinfo.addChildElement("useBillingDB");
-        SOAPElement c1soapuseBillingDBValue = c1soapuseBillingDB.addChildElement("value");
-        c1soapuseBillingDBValue.addTextNode("true");
-        
-        SOAPElement c1soapusesubscriberData = c1soapBodyinfo.addChildElement("subscriberData");
-        SOAPElement c1soapusesubscriberDataValue = c1soapusesubscriberData.addChildElement("value");
-        c1soapusesubscriberDataValue.addTextNode("true");
-               
-        
-    }
-	//Create SOAP request
+		SOAPBody c1soapBody = envelope.getBody();
+		SOAPElement c1soapBodySubscriberRetrieve = c1soapBody.addChildElement("SubscriberRetrieve", myNamespace);
+		SOAPElement c1soapBodyInput = c1soapBodySubscriberRetrieve.addChildElement("input", myNamespace);
+		SOAPElement c1soapBodyuserIdName = c1soapBodyInput.addChildElement("userIdName");
+		c1soapBodyuserIdName.addTextNode(username);
+		SOAPElement c1soapBodysecurityToken = c1soapBodyInput.addChildElement("securityToken");
+		c1soapBodysecurityToken.addTextNode(token);
+		SOAPElement c1soapBodysubscriberId = c1soapBodyInput.addChildElement("subscriberId");
+		SOAPElement c1soapBodysubscriberId2 = c1soapBodysubscriberId.addChildElement("subscriberId");
+		SOAPElement c1soapBodysubscriberId2value = c1soapBodysubscriberId2.addChildElement("value");
+		c1soapBodysubscriberId2value.addTextNode(MSISDN);
+		SOAPElement c1soapBodysubscriberExternalIdType = c1soapBodysubscriberId
+				.addChildElement("subscriberExternalIdType");
+		SOAPElement c1soapBodysubscriberExternalIdTypeValue = c1soapBodysubscriberExternalIdType
+				.addChildElement("value");
+		c1soapBodysubscriberExternalIdTypeValue.addTextNode("1");
+		SOAPElement c1soapBodyinfo = c1soapBodyInput.addChildElement("info");
+
+		SOAPElement c1soapuseBillingDB = c1soapBodyinfo.addChildElement("useBillingDB");
+		SOAPElement c1soapuseBillingDBValue = c1soapuseBillingDB.addChildElement("value");
+		c1soapuseBillingDBValue.addTextNode("true");
+
+		SOAPElement c1soapusesubscriberData = c1soapBodyinfo.addChildElement("subscriberData");
+		SOAPElement c1soapusesubscriberDataValue = c1soapusesubscriberData.addChildElement("value");
+		c1soapusesubscriberDataValue.addTextNode("true");
+
+	}
+
+	// Create SOAP request
 	private static SOAPMessage createSOAPRequest(String soapAction, String MSISDN) throws Exception {
-        MessageFactory messageFactory = MessageFactory.newInstance();
-        SOAPMessage soapMessage = messageFactory.createMessage();
- 
-        createSoapEnvelope(soapMessage, MSISDN);
+		MessageFactory messageFactory = MessageFactory.newInstance();
+		SOAPMessage soapMessage = messageFactory.createMessage();
 
-        MimeHeaders headers = soapMessage.getMimeHeaders();
-        headers.addHeader("SOAPAction", soapAction);
+		createSoapEnvelope(soapMessage, MSISDN);
 
-        soapMessage.saveChanges();
-        
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        soapMessage.writeTo(stream);
-        String message = new String(stream.toByteArray(), "utf-8");
+		MimeHeaders headers = soapMessage.getMimeHeaders();
+		headers.addHeader("SOAPAction", soapAction);
 
-        /* Print the request message, just for debugging purposes */
-        LOGGER.log( Level.INFO,"Request SOAP Message -->" + message); 
-        return soapMessage;
-    }
-	
+		soapMessage.saveChanges();
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		soapMessage.writeTo(stream);
+		String message = new String(stream.toByteArray(), "utf-8");
+
+		/* Print the request message, just for debugging purposes */
+		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
+		return soapMessage;
+	}
+
 // Call Subscriber retrieve soap:
-public void callSubscriberRetrieveService( String MSISDN) {
-    	
-    	try {
-    		
-    		 //String soapEndpointUrl = "http://10.128.202.137:8001/services/SubscriberService";
-    	     //String soapAction = "http://10.128.202.137:8001/services/SubscriberService.wsdl";
-    		//http://10.128.202.137:8001: prod
-    		//http://10.1.38.11:8001: diot 1
-    		//10.1.38.21: diot2
-    		String soapEndpointUrl = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine()) + "/services/SubscriberService" ;
-    		String soapAction = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine()) + "/services/SubscriberService.wsdl";
-    		
-            // Create SOAP Connection
-            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+	public void callSubscriberRetrieveService(String MSISDN) {
 
-            // Send SOAP Message to SOAP Server
-            LOGGER.log( Level.INFO,"Calling SubscriberRetrieve..."); 
-            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, MSISDN), soapEndpointUrl);
+		try {
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            soapResponse.writeTo(stream);
-            String message = new String(stream.toByteArray());
-            
-            // Print the SOAP Response
-            LOGGER.log( Level.INFO,"Receiving SOAP Response "+ message);                        
-            System.out.println();
-            
-            //Writing to file for further use
-            soapResponse.writeTo(new FileOutputStream(new File("src\\input\\SubscriberRetrieveResponse.xml")));
-            soapConnection.close();    
-            
-            //Read Subscriber retrieve response from temp xml file
-            LOGGER.log( Level.INFO,"Subcriber details --> ");
-            File xmlresponse = new File("src\\input\\SubscriberRetrieveResponse.xml");
-            DocumentBuilderFactory dbuilderfac =  DocumentBuilderFactory.newInstance();
-            DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
-            Document doc = dbuilder.parse(xmlresponse);
-            
-            doc.getDocumentElement().normalize();
-            
-            NodeList outputlist = doc.getElementsByTagName("subscriber");
-            Element el = (Element) outputlist.item(0);
-            NodeList childnodes = el.getChildNodes();
-            
-            for (int i=0; i< childnodes.getLength(); i++) {
-            	
-            	Node child = childnodes.item(i);
-            	if (child.getNodeType() == Node.ELEMENT_NODE) {
-            		if (childnodes.item(i).getTextContent().trim() != "") {
-            		LOGGER.log( Level.INFO,i+"::"+ childnodes.item(i).getNodeName()+"::"+childnodes.item(i).getTextContent().trim());
-            		}
-            	}
-            }  
-            LOGGER.log( Level.INFO, "<-- End Subscriber Details");
-    	} catch (Exception e) {
-        	
-            LOGGER.log( Level.SEVERE,e.toString());
-        }
-    	
-		
-    }
-	
+			// String soapEndpointUrl =
+			// "http://10.128.202.137:8001/services/SubscriberService";
+			// String soapAction =
+			// "http://10.128.202.137:8001/services/SubscriberService.wsdl";
+			// http://10.128.202.137:8001: prod
+			// http://10.1.38.11:8001: diot 1
+			// 10.1.38.21: diot2
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+					+ "/services/SubscriberService";
+			String soapAction = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+					+ "/services/SubscriberService.wsdl";
+
+			// Create SOAP Connection
+			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+
+			// Send SOAP Message to SOAP Server
+			LOGGER.log(Level.INFO, "Calling SubscriberRetrieve...");
+			SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, MSISDN), soapEndpointUrl);
+
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			soapResponse.writeTo(stream);
+			String message = new String(stream.toByteArray());
+
+			// Print the SOAP Response
+			LOGGER.log(Level.INFO, "Receiving SOAP Response " + message);
+
+			// Writing to file for further use
+			soapResponse.writeTo(new FileOutputStream(new File("src\\input\\SubscriberRetrieveResponse.xml")));
+			soapConnection.close();
+
+			// Read Subscriber retrieve response from temp xml file
+			LOGGER.log(Level.INFO, "Simplified Results --> " + MSISDN);
+
+			File xmlresponse = new File("src\\input\\SubscriberRetrieveResponse.xml");
+			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
+			Document doc = dbuilder.parse(xmlresponse);
+
+			doc.getDocumentElement().normalize();
+			Node firstChild = doc.getFirstChild(); // get first child to list through other elements
+
+			NodeList outputlist = doc.getElementsByTagName(firstChild.getNodeName());
+			Element el = (Element) outputlist.item(0);
+			NodeList childnodes = el.getChildNodes();
+
+			if (childnodes.item(0).getNodeName().equals("S:Body")) {
+
+				for (int i = 0; i < childnodes.getLength(); i++) {
+
+					Node child = childnodes.item(i);
+					if (child.getNodeType() == Node.ELEMENT_NODE) {
+						if (childnodes.item(i).getTextContent().trim() != "") {
+
+							LOGGER.log(Level.SEVERE, i + "::" + childnodes.item(i).getNodeName() + "::"
+									+ childnodes.item(i).getTextContent().trim());
+						}
+					}
+				}
+			} else {
+				for (int i = 0; i < childnodes.getLength(); i++) {
+
+					Node child = childnodes.item(i);
+					if (child.getNodeType() == Node.ELEMENT_NODE) {
+						if (childnodes.item(i).getTextContent().trim() != "") {
+
+							LOGGER.log(Level.INFO, i + "::" + childnodes.item(i).getNodeName() + "::"
+									+ childnodes.item(i).getTextContent().trim());
+						}
+					}
+				}
+
+			}
+
+			LOGGER.log(Level.INFO, "<-- End Simplified result: " + MSISDN);
+			LOGGER.log(Level.INFO, "--------------------------------------");
+		} catch (Exception e) {
+
+			LOGGER.log(Level.SEVERE, e.toString());
+		}
+
+	}
+
 }
