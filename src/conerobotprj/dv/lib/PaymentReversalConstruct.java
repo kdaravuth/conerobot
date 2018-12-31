@@ -159,7 +159,7 @@ public class PaymentReversalConstruct {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 	// End create soap request
@@ -197,8 +197,8 @@ public class PaymentReversalConstruct {
 			String message = new String(stream.toByteArray());
 
 			// Print the SOAP Response
-			LOGGER.log(Level.INFO, "Response SOAP..." + message);
-			System.out.println();
+			LOGGER.log(Level.FINEST, "Response SOAP..." + message);
+			// System.out.println();
 
 			// Writing to file for further use
 			soapResponse.writeTo(new FileOutputStream(new File("src\\input\\PaymentReversalResponse.xml")));

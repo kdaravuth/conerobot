@@ -43,6 +43,9 @@ public class SubscriberRetrieveConstruct {
 	// private static final Logger LOGGER = Logger.getLogger(
 	// SubscriberRetrieveConstruct.class.getName());
 	private static Logger LOGGER = null;
+	public String serviceInternalId;
+	public String serviceInternalIdResets;
+
 	static {
 
 		try {
@@ -143,7 +146,7 @@ public class SubscriberRetrieveConstruct {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 
@@ -177,7 +180,7 @@ public class SubscriberRetrieveConstruct {
 			String message = new String(stream.toByteArray());
 
 			// Print the SOAP Response
-			LOGGER.log(Level.INFO, "Receiving SOAP Response " + message);
+			LOGGER.log(Level.FINEST, "Receiving SOAP Response " + message);
 
 			// Writing to file for further use
 			soapResponse.writeTo(new FileOutputStream(new File("src\\input\\SubscriberRetrieveResponse.xml")));
@@ -212,17 +215,35 @@ public class SubscriberRetrieveConstruct {
 					}
 				}
 			} else {
-				for (int i = 0; i < childnodes.getLength(); i++) {
 
-					Node child = childnodes.item(i);
+				NodeList outputSubInfoList = doc.getElementsByTagName("subscriber");
+				Element elSubInfo = (Element) outputSubInfoList.item(0);
+				NodeList childnodesSubInfo = elSubInfo.getChildNodes();
+				String tempSubInfo = "";
+
+				for (int i = 0; i < childnodesSubInfo.getLength(); i++) {
+
+					Node child = childnodesSubInfo.item(i);
+					// LOGGER.log(Level.INFO, "Node Name: " + child.getNodeName());
+
+					if (child.getNodeName() == "serviceInternalId") {
+						serviceInternalId = childnodesSubInfo.item(i).getTextContent().trim();
+						// LOGGER.log(Level.INFO, "service internal: " + serviceInternalId);
+					}
+					if (child.getNodeName() == "serviceInternalIdResets") {
+						serviceInternalIdResets = childnodesSubInfo.item(i).getTextContent().trim();
+					}
+
 					if (child.getNodeType() == Node.ELEMENT_NODE) {
-						if (childnodes.item(i).getTextContent().trim() != "") {
+						if (childnodesSubInfo.item(i).getTextContent().trim() != "") {
+							tempSubInfo += childnodesSubInfo.item(i).getNodeName() + "="
+									+ childnodesSubInfo.item(i).getTextContent().trim() + " ; ";
 
-							LOGGER.log(Level.INFO, i + "::" + childnodes.item(i).getNodeName() + "::"
-									+ childnodes.item(i).getTextContent().trim());
 						}
 					}
 				}
+
+				LOGGER.log(Level.INFO, tempSubInfo);
 
 			}
 
