@@ -45,6 +45,7 @@ public class SubscriberRetrieveConstruct {
 	private static Logger LOGGER = null;
 	public String serviceInternalId;
 	public String serviceInternalIdResets;
+	public String parentAccountInternalId;
 
 	static {
 
@@ -230,8 +231,13 @@ public class SubscriberRetrieveConstruct {
 						serviceInternalId = childnodesSubInfo.item(i).getTextContent().trim();
 						// LOGGER.log(Level.INFO, "service internal: " + serviceInternalId);
 					}
+
 					if (child.getNodeName() == "serviceInternalIdResets") {
 						serviceInternalIdResets = childnodesSubInfo.item(i).getTextContent().trim();
+					}
+
+					if (child.getNodeName() == "parentAccountInternalId") {
+						parentAccountInternalId = childnodesSubInfo.item(i).getTextContent().trim();
 					}
 
 					if (child.getNodeType() == Node.ELEMENT_NODE) {

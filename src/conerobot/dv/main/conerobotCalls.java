@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
@@ -100,6 +101,30 @@ public class conerobotCalls {
 
 					}
 				}
+
+				else if (args[0].equals("NRCAdd") == true) {
+
+					// Retrieving credential
+					NrcAddConstruct nac = new NrcAddConstruct();
+					nac.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Running NRC Adding function");
+					// oac.callingOfferAdd("26773040775", "89", "true");
+
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						LOGGER.log(Level.INFO, "Processing MSISDN: " + line.split(",")[0]);
+						// nac.callingNRCAdd(MSISDN, NRCtermID, NRCCategory, NRCRate, comments);
+						nac.callingNRCAdd(line.split(",")[0], line.split(",")[1], line.split(",")[2],
+								line.split(",")[3], line.split(",")[4]);
+
+					}
+				}
+				// Next Function
+				// End Next Function
 
 			} else {
 				LOGGER.log(Level.SEVERE,
