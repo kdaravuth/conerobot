@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
@@ -123,7 +124,26 @@ public class conerobotCalls {
 
 					}
 				}
-				// Next Function
+				// Calling ExtendedData Update
+				else if (args[0].equals("ExtendedDataUpdate") == true) {
+
+					ExtendedDataUpdate edu = new ExtendedDataUpdate();
+					edu.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.FINEST, "Starting Extended Data Update");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						LOGGER.log(Level.INFO, "MSISDN: " + line.split("::")[0]);
+						LOGGER.log(Level.FINEST, "Data: " + line.split("::")[1]);
+						// callingExtendedDataUpdate(msisdn, extendeddata)
+						edu.callingExtendedDataUpdate(line.split("::")[0], line.split("::")[1]);
+
+					}
+
+				}
 				// End Next Function
 
 			} else {
@@ -131,7 +151,7 @@ public class conerobotCalls {
 						"Usage: Arg[0] Arg[1] Arg[2] - Example: conerobotCalls SubscriberRetrieve batch file");
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Please ensure the file format which is provided is correct " + e);
+			LOGGER.log(Level.SEVERE, "Please ensure the file format which is provided is correct " + e.getStackTrace());
 		}
 
 	}

@@ -77,13 +77,13 @@ public class SubscriberRetrieveConstruct {
 				lines.add(line);
 			}
 			realm = lines.get(0);
-			LOGGER.log(Level.INFO, "Retrieving realm...");
+			LOGGER.log(Level.FINEST, "Retrieving realm...");
 
 			username = lines.get(1);
-			LOGGER.log(Level.INFO, "Retrieving username...");
+			LOGGER.log(Level.FINEST, "Retrieving username...");
 
 			token = lines.get(2);
-			LOGGER.log(Level.INFO, "Retrieving token...");
+			LOGGER.log(Level.FINEST, "Retrieving token...");
 
 			bfcred.close();
 
@@ -163,9 +163,9 @@ public class SubscriberRetrieveConstruct {
 			// http://10.128.202.137:8001: prod
 			// http://10.1.38.11:8001: diot 1
 			// 10.1.38.21: diot2
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService";
-			String soapAction = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService.wsdl";
 
 			// Create SOAP Connection
@@ -173,7 +173,7 @@ public class SubscriberRetrieveConstruct {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Calling SubscriberRetrieve...");
+			LOGGER.log(Level.FINEST, "Calling SubscriberRetrieve...");
 			SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, MSISDN), soapEndpointUrl);
 
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -184,13 +184,13 @@ public class SubscriberRetrieveConstruct {
 			LOGGER.log(Level.FINEST, "Receiving SOAP Response " + message);
 
 			// Writing to file for further use
-			soapResponse.writeTo(new FileOutputStream(new File("src\\input\\SubscriberRetrieveResponse.xml")));
+			soapResponse.writeTo(new FileOutputStream(new File("src/input/SubscriberRetrieveResponse.xml")));
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
-			LOGGER.log(Level.INFO, "Simplified Results --> " + MSISDN);
+			LOGGER.log(Level.FINEST, "Simplified Results --> " + MSISDN);
 
-			File xmlresponse = new File("src\\input\\SubscriberRetrieveResponse.xml");
+			File xmlresponse = new File("src/input/SubscriberRetrieveResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
 			Document doc = dbuilder.parse(xmlresponse);
@@ -249,12 +249,12 @@ public class SubscriberRetrieveConstruct {
 					}
 				}
 
-				LOGGER.log(Level.INFO, tempSubInfo);
+				LOGGER.log(Level.FINEST, tempSubInfo);
 
 			}
 
-			LOGGER.log(Level.INFO, "<-- End Simplified result: " + MSISDN);
-			LOGGER.log(Level.INFO, "--------------------------------------");
+			LOGGER.log(Level.FINEST, "<-- End Simplified result: " + MSISDN);
+			LOGGER.log(Level.FINEST, "--------------------------------------");
 		} catch (Exception e) {
 
 			LOGGER.log(Level.SEVERE, e.toString());
