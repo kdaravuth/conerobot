@@ -16,6 +16,7 @@ import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
+import conerobotprj.dv.lib.PostpaidOBAdjust;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
 
 /**
@@ -140,6 +141,25 @@ public class conerobotCalls {
 						LOGGER.log(Level.FINEST, "Data: " + line.split("::")[1]);
 						// callingExtendedDataUpdate(msisdn, extendeddata)
 						edu.callingExtendedDataUpdate(line.split("::")[0], line.split("::")[1]);
+
+					}
+
+				}
+				// End Next Function
+
+				// Calling Postpaid Balance adjustment
+				else if (args[0].equals("CallingPostpaidOBAdjust") == true) {
+
+					PostpaidOBAdjust poa = new PostpaidOBAdjust();
+					poa.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Starting Postpaid Outstanding Adjustment");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						poa.CallingPostpaidOBAdjust(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
 
 					}
 
