@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import conerobotprj.dv.lib.AccountContractRenew;
+import conerobotprj.dv.lib.AccountInfoGet;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
@@ -160,6 +162,44 @@ public class conerobotCalls {
 						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						poa.CallingPostpaidOBAdjust(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
+
+					}
+
+				}
+				// End Next Function
+
+				// Calling Account Infor Retrieve Function
+				else if (args[0].equals("callingAccountInfoRetrieve") == true) {
+
+					AccountInfoGet aig = new AccountInfoGet();
+					aig.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Starting Account Info Retrieve");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						aig.callingAccountInfoRetrieve(line);
+
+					}
+
+				}
+				// End Next Function
+
+				// Calling Account Contract Renew
+				else if (args[0].equals("AccountContractRenew") == true) {
+
+					AccountContractRenew acr = new AccountContractRenew();
+					acr.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Starting Account Contract Renew");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						acr.callAccountContractRenew(line.split("::")[0], line.split("::")[1]);
 
 					}
 
