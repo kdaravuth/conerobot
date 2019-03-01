@@ -14,11 +14,14 @@ import java.util.logging.Logger;
 
 import conerobotprj.dv.lib.AccountContractRenew;
 import conerobotprj.dv.lib.AccountInfoGet;
+import conerobotprj.dv.lib.AccountInfoUpdate;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
 import conerobotprj.dv.lib.PostpaidOBAdjust;
+import conerobotprj.dv.lib.PrimaryOfferSwap;
+import conerobotprj.dv.lib.SubscriberInfoUpdate;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
 
 /**
@@ -200,12 +203,71 @@ public class conerobotCalls {
 						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						acr.callAccountContractRenew(line.split("::")[0], line.split("::")[1]);
+						LOGGER.log(Level.INFO, "2nd Run for the non-completed info Account");
+						acr.callAccountContractRenew(line.split("::")[0], line.split("::")[1]);
 
 					}
 
 				}
 				// End Next Function
 
+				// Calling Primary offer Swapping
+				else if (args[0].equals("callPrimaryOfferSwapping") == true) {
+
+					PrimaryOfferSwap pos = new PrimaryOfferSwap();
+					pos.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Starting Primary offer swapping");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						pos.callPrimaryOfferSwapping(line.split("::")[0], line.split("::")[1]);
+
+					}
+
+				}
+				// End Next Function
+
+				// Calling Account Information Update
+				else if (args[0].equals("callingAccountInfoUpdate") == true) {
+
+					AccountInfoUpdate aiu = new AccountInfoUpdate();
+					aiu.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Account Information Updating...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						aiu.callingAccountInfoUpdate(line.split("::")[0], line.split("::")[1], line.split("::")[2],
+								line.split("::")[3], line.split("::")[4], line.split("::")[5], line.split("::")[6],
+								line.split("::")[7], line.split("::")[8], line.split("::")[9]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling SUB Information Update
+				else if (args[0].equals("callingSubInfoUpdate") == true) {
+
+					SubscriberInfoUpdate siu = new SubscriberInfoUpdate();
+					siu.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Subscriber Information Updating...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						siu.callingSubInfoUpdate(line.split("::")[0], line.split("::")[1], line.split("::")[2],
+								line.split("::")[6], line.split("::")[10]);
+					}
+
+				}
+				// End Next Function
 			} else {
 				LOGGER.log(Level.SEVERE,
 						"Usage: Arg[0] Arg[1] Arg[2] - Example: conerobotCalls SubscriberRetrieve batch file");
