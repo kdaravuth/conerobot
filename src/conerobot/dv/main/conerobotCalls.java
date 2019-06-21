@@ -16,6 +16,7 @@ import conerobotprj.dv.lib.AccountContractRenew;
 import conerobotprj.dv.lib.AccountInfoGet;
 import conerobotprj.dv.lib.AccountInfoUpdate;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
+import conerobotprj.dv.lib.InventoryLoad;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
@@ -284,6 +285,24 @@ public class conerobotCalls {
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						pba.callPostBillAdj(line.split("::")[0], line.split("::")[1], line.split("::")[2],
 								line.split("::")[3], line.split("::")[4], line.split("::")[5]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling Inventory load
+				else if (args[0].equals("invdload") == true) {
+
+					InventoryLoad il = new InventoryLoad();
+					il.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Inventory loading start...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						il.callInventoryLoad(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
 					}
 
 				}
