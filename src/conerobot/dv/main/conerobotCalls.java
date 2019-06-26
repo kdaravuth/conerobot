@@ -23,6 +23,8 @@ import conerobotprj.dv.lib.PaymentReversalConstruct;
 import conerobotprj.dv.lib.PostBillAdj;
 import conerobotprj.dv.lib.PostpaidOBAdjust;
 import conerobotprj.dv.lib.PrimaryOfferSwap;
+import conerobotprj.dv.lib.RcterminstRateOverride;
+import conerobotprj.dv.lib.SubscriberCreationFromOffer;
 import conerobotprj.dv.lib.SubscriberInfoUpdate;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
 
@@ -303,6 +305,45 @@ public class conerobotCalls {
 						// CallingPostpaidOBAdjust(String AccountNo, String Amount, String Annotation)
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						il.callInventoryLoad(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to override the rate
+				else if (args[0].equals("rctermrateoverride") == true) {
+
+					RcterminstRateOverride il = new RcterminstRateOverride();
+					il.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Rate Overriden Process starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// il.callRTIRO(InstanceID, ActiveDT, Rate);
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						il.callRTIRO(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to override the rate
+				else if (args[0].equals("subscriberCreate") == true) {
+
+					SubscriberCreationFromOffer sc = new SubscriberCreationFromOffer();
+					sc.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Rate Overriden Process starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+						// sc.callSCFO(ExternalID, ExternalIDType, Company, Fname, lname, AcctNo,
+						// address1, address2, offerID);
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						sc.callSCFO(line.split("::")[0], line.split("::")[1], line.split("::")[2], line.split("::")[3],
+								line.split("::")[4], line.split("::")[5], line.split("::")[6], line.split("::")[7],
+								line.split("::")[8]);
 					}
 
 				}
