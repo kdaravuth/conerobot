@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import conerobotprj.dv.lib.AccountContractRenew;
 import conerobotprj.dv.lib.AccountInfoGet;
 import conerobotprj.dv.lib.AccountInfoUpdate;
+import conerobotprj.dv.lib.EMAHSSDisconnection;
+import conerobotprj.dv.lib.EMAHSSSubscription;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.InventoryLoad;
 import conerobotprj.dv.lib.NrcAddConstruct;
@@ -334,16 +336,53 @@ public class conerobotCalls {
 					SubscriberCreationFromOffer sc = new SubscriberCreationFromOffer();
 					sc.retreiveCred(new File("src/config/soapconnection.cfg"));
 
-					LOGGER.log(Level.INFO, "Rate Overriden Process starts...");
+					LOGGER.log(Level.INFO, "Subscriber Creation Starts...");
 					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
 					String line;
 					while ((line = bfrdr.readLine()) != null) {
-						// sc.callSCFO(ExternalID, ExternalIDType, Company, Fname, lname, AcctNo,
-						// address1, address2, offerID);
+						// sc.callSCFO(ExternalID, ExternalIDType, Company, Fname, lname,
+						// AcctNo,address1, address2, offerID);
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						sc.callSCFO(line.split("::")[0], line.split("::")[1], line.split("::")[2], line.split("::")[3],
 								line.split("::")[4], line.split("::")[5], line.split("::")[6], line.split("::")[7],
 								line.split("::")[8]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to Subscriber the profile to HSS
+				else if (args[0].equals("EMAHSSSubscription") == true) {
+
+					EMAHSSSubscription emasub = new EMAHSSSubscription();
+
+					LOGGER.log(Level.INFO, "Subscription to HSS Starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// emasub.callHSSSubscription(imsi, MSISDN, KI, LTEProfile, Paymentmode);
+						emasub.callHSSSubscription(line.split("::")[0], line.split("::")[1], line.split("::")[2],
+								line.split("::")[3], line.split("::")[4]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to disconnect subscriber's profile from HSS
+				else if (args[0].equals("EMAHSSDisconnection") == true) {
+
+					EMAHSSDisconnection emasub = new EMAHSSDisconnection();
+
+					LOGGER.log(Level.INFO, "Disconnection from HSS Starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+
+						emasub.callHSSDisconnection(line.split("::")[0]);
 					}
 
 				}

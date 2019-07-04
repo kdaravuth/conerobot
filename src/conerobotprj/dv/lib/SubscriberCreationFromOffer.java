@@ -169,6 +169,24 @@ public class SubscriberCreationFromOffer {
 		externalId.addAttribute(changedQname, "true");
 		SOAPElement externalIdValue = externalId.addTextNode("value");
 		externalIdValue.addTextNode(ExternalID);
+		// Add extended data for offer
+		SOAPElement offerInstances = input.addChildElement("offerInstances");
+
+		SOAPElement offeridInst = offerInstances.addChildElement("offerId");
+		offeridInst.addAttribute(setQname, "true");
+		offeridInst.addAttribute(changedQname, "true");
+		SOAPElement offerValue = offeridInst.addChildElement("value");
+		offerValue.addTextNode(offerID);
+
+		SOAPElement offerExt = offerInstances.addChildElement("extendedData");
+		offerExt.addAttribute(setQname, "true");
+		offerExt.addAttribute(changedQname, "true");
+		SOAPElement offerExtValue = offerExt.addChildElement("value");
+		offerExtValue.addTextNode(
+				"<![CDATA[<ExtendedData><Parameter name=\"original_external_id\"><StringValue>2673123123</StringValue></Parameter><Parameter name=\"annotation\"><StringValue>0</StringValue></Parameter><Parameter\r\n"
+						+ "name=\"Fluency\"><IntegerValue>1</IntegerValue></Parameter><Parameter name=\"SYSPRO_INVENTORY_COUNT\"><IntegerValue>1</IntegerValue></Parameter>]]>");
+
+//end Add extended data for offer
 
 		SOAPElement subscriberExternalIdList = input.addChildElement("subscriberExternalIdList");
 
@@ -205,22 +223,13 @@ public class SubscriberCreationFromOffer {
 		addressTypeIdValue.addTextNode("1");
 
 		SOAPElement effectiveDate = input.addChildElement("effectiveDate");
-		effectiveDate.addTextNode("Please replace by Date");
+		effectiveDate.addTextNode("2019-06-01T00:00:00.0");
 
 		SOAPElement waiveActivation = input.addChildElement("waiveActivation");
-		waiveActivation.addAttribute(setQname, "true");
-		waiveActivation.addAttribute(changedQname, "true");
-		SOAPElement waiveActivationValue = waiveActivation.addChildElement("value");
-		waiveActivationValue.addTextNode("true");
-
-		SOAPElement waiveTermination = input.addChildElement("waiveActivation");
-		waiveTermination.addAttribute(setQname, "true");
-		waiveTermination.addAttribute(changedQname, "true");
-		SOAPElement waiveTerminationValue = waiveTermination.addChildElement("value");
-		waiveTerminationValue.addTextNode("true");
+		waiveActivation.addTextNode("true");
 
 		SOAPElement autoCommitOrder = input.addChildElement("autoCommitOrder");
-		autoCommitOrder.addTextNode("false");
+		autoCommitOrder.addTextNode("true");
 
 		SOAPElement generateWorkflow = input.addChildElement("generateWorkflow");
 		generateWorkflow.addTextNode("false");

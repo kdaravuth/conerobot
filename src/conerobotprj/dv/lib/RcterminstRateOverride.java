@@ -102,6 +102,10 @@ public class RcterminstRateOverride {
 				myNamespace);
 		SOAPElement input = RcTermInstanceRateOverrideCreate.addChildElement("input", myNamespace);
 
+		SOAPElement ServerIdLocator = input.addChildElement("ServerIdLocator");
+		SOAPElement billingServerId = ServerIdLocator.addChildElement("billingServerId");
+		billingServerId.addTextNode("43");
+
 		SOAPElement realm = input.addChildElement("realm");
 		realm.addTextNode("sapi");
 		SOAPElement securityToken = input.addChildElement("securityToken");
@@ -186,7 +190,7 @@ public class RcterminstRateOverride {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Start Loading the inventory");
+			LOGGER.log(Level.INFO, "Start Overriding instance: " + InstanceID);
 			SOAPMessage soapResponse = soapConnection.call(createSRRTIRO(soapAction, InstanceID, ActiveDT, Rate),
 					soapEndpointUrl);
 
@@ -199,13 +203,13 @@ public class RcterminstRateOverride {
 			// System.out.println();
 
 			// Writing to file for further use
-			soapResponse.writeTo(new FileOutputStream(new File("src/input/rcTermInstanceRateOverride.xml")));
+			soapResponse.writeTo(new FileOutputStream(new File("src/input/rcTermInstanceRateOverrideResponse.xml")));
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
 			LOGGER.log(Level.INFO, "Overriding RC Term Inst:  --> " + InstanceID);
 
-			File xmlresponse = new File("src/input/InvElementCreateResponse.xml");
+			File xmlresponse = new File("src/input/rcTermInstanceRateOverrideResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
 			Document doc = dbuilder.parse(xmlresponse);
