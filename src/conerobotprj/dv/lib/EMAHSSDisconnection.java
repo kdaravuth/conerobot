@@ -44,16 +44,23 @@ public class EMAHSSDisconnection {
 
 	}
 	// End initialize logger
+
 	// Sapi Credential retrieval
-	public static String SequenceId = "10035454196801511292";
-	public static String TransactionId = "12345";
-	public static String SessionId = "85b2fd2a85b2fd2a000000001562132131649";
+	public static String SequenceId = "";
+	public static String TransactionId = "";
+	public static String SessionId = "";
 
 	// Create SOAP
 	public static void createSOAPHSSDisconnection(SOAPMessage soapMessage, String imsi) throws SOAPException {
 
-		// SOAP Envelope
+		// Initialize session
+		EMASessionRefresh session = new EMASessionRefresh();
+		session.callGetEMASession("sogadm");
+		SequenceId = session.SequenceId;
+		SessionId = session.SessionId;
+		TransactionId = session.TransactionId;
 
+		// SOAP Envelope
 		SOAPPart soapPart = soapMessage.getSOAPPart();
 
 		String myNamespaceCai3 = "cai3";
@@ -70,10 +77,10 @@ public class EMAHSSDisconnection {
 		SequenceId.addTextNode(EMAHSSDisconnection.SequenceId);
 
 		SOAPElement TransactionIdd = emaHeader.addChildElement("TransactionId", myNamespaceCai3);
-		TransactionIdd.addTextNode(TransactionId);
+		TransactionIdd.addTextNode(EMAHSSDisconnection.TransactionId);
 
 		SOAPElement SessionIdd = emaHeader.addChildElement("SessionId", myNamespaceCai3);
-		SessionIdd.addTextNode(SessionId);
+		SessionIdd.addTextNode(EMAHSSDisconnection.SessionId);
 
 		SOAPBody emasoapBody = envelope.getBody();
 		SOAPElement Delete = emasoapBody.addChildElement("Delete", myNamespaceCai3);
@@ -178,7 +185,11 @@ public class EMAHSSDisconnection {
 				}
 			}
 
-			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + imsi);
+			LOGGER.log(Level.INFO, "<-- End Processing IMSI " + imsi);
+			EMASessionLogout logout = new EMASessionLogout();
+			// Log Out
+			logout.callLogOutEMASession(EMAHSSDisconnection.SessionId);
+
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 

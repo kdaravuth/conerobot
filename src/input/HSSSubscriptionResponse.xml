@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Header><SessionId xmlns="http://schemas.ericsson.com/cai3g1.2/">85b2fd2a85b2fd2a000000001562226677983</SessionId><TransactionId xmlns="http://schemas.ericsson.com/cai3g1.2/">3679433027182567292</TransactionId><SequenceId xmlns="http://schemas.ericsson.com/cai3g1.2/">3679433027182567292</SequenceId></S:Header><S:Body><CreateResponse xmlns="http://schemas.ericsson.com/cai3g1.2/"><MOId /><MOAttributes><createResponseSubscription xmlns="http://schemas.ericsson.com/ema/UserProvisioning/LteSub/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<transId>34567</transId>
+</createResponseSubscription></MOAttributes></CreateResponse></S:Body></S:Envelope>

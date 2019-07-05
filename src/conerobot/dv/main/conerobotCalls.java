@@ -17,6 +17,8 @@ import conerobotprj.dv.lib.AccountInfoGet;
 import conerobotprj.dv.lib.AccountInfoUpdate;
 import conerobotprj.dv.lib.EMAHSSDisconnection;
 import conerobotprj.dv.lib.EMAHSSSubscription;
+import conerobotprj.dv.lib.EMASessionLogout;
+import conerobotprj.dv.lib.EMASessionRefresh;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.InventoryLoad;
 import conerobotprj.dv.lib.NrcAddConstruct;
@@ -383,6 +385,43 @@ public class conerobotCalls {
 						LOGGER.log(Level.INFO, "--------------------------------------");
 
 						emasub.callHSSDisconnection(line.split("::")[0]);
+
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to disconnect subscriber's profile from HSS
+				else if (args[0].equals("RefreshSession") == true) {
+
+					EMASessionRefresh emasession = new EMASessionRefresh();
+
+					LOGGER.log(Level.INFO, "Session Refresh Starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+
+						emasession.callGetEMASession(line.split("::")[0]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to disconnect subscriber's profile from HSS
+				else if (args[0].equals("CloseSession") == true) {
+
+					EMASessionLogout emasession = new EMASessionLogout();
+
+					// LOGGER.log(Level.INFO, "Session Refresh Starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+
+						emasession.callLogOutEMASession(line.split("::")[0]);
 					}
 
 				}

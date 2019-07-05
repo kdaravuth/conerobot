@@ -45,13 +45,20 @@ public class EMAHSSSubscription {
 	}
 	// End initialize logger
 	// Sapi Credential retrieval
-	public static String SequenceId = "10035454196801511292";
+	public static String SequenceId = "13600540149293162364";
 	public static String TransactionId = "12345";
-	public static String SessionId = "85b2fd2a85b2fd2a000000001562132131649";
+	public static String SessionId = "85b2fd2a85b2fd2a000000001562166647824";
 
 	// Create SOAP for Contract Renewal -- Customer_DOB
 	public static void createSOAPHSSSubscription(SOAPMessage soapMessage, String imsi, String MSISDN, String KI,
 			String LTEProfile, String Paymentmode) throws SOAPException {
+
+		// Initialize session
+		EMASessionRefresh session = new EMASessionRefresh();
+		session.callGetEMASession("sogadm");
+		SequenceId = session.SequenceId;
+		SessionId = session.SessionId;
+		TransactionId = session.TransactionId;
 
 		// SOAP Envelope
 
@@ -71,10 +78,10 @@ public class EMAHSSSubscription {
 		SequenceId.addTextNode(EMAHSSSubscription.SequenceId);
 
 		SOAPElement TransactionIdd = emaHeader.addChildElement("TransactionId", myNamespaceCai3);
-		TransactionIdd.addTextNode(TransactionId);
+		TransactionIdd.addTextNode(EMAHSSSubscription.TransactionId);
 
 		SOAPElement SessionIdd = emaHeader.addChildElement("SessionId", myNamespaceCai3);
-		SessionIdd.addTextNode(SessionId);
+		SessionIdd.addTextNode(EMAHSSSubscription.SessionId);
 
 		SOAPBody emasoapBody = envelope.getBody();
 		SOAPElement Create = emasoapBody.addChildElement("Create", myNamespaceCai3);
@@ -96,7 +103,7 @@ public class EMAHSSSubscription {
 		imsi2.addTextNode(imsi);
 
 		SOAPElement transId = createSubscription.addChildElement("transId", myNamespaceltes);
-		transId.addTextNode("34567");
+		transId.addTextNode(EMAHSSSubscription.TransactionId);
 		SOAPElement ki = createSubscription.addChildElement("ki", myNamespaceltes);
 		ki.addTextNode(KI);
 
@@ -144,7 +151,7 @@ public class EMAHSSSubscription {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Calling Account Contract Renew...");
+			LOGGER.log(Level.INFO, "Calling EMA Subscription Command...");
 			SOAPMessage soapResponse = soapConnection.call(
 					createSRHSSSubscription(soapAction, imsi, MSISDN, KI, LTEProfile, Paymentmode), soapEndpointUrl);
 
@@ -199,6 +206,9 @@ public class EMAHSSSubscription {
 			}
 
 			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + imsi);
+			EMASessionLogout logout = new EMASessionLogout();
+			// Log Out
+			logout.callLogOutEMASession(EMAHSSDisconnection.SessionId);
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 
