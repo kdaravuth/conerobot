@@ -1,0 +1,1 @@
+<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><LoginResponse xmlns="http://schemas.ericsson.com/cai3g1.2/"><sessionId>85b2fd2a85b2fd2a000000001562226677983</sessionId><baseSequenceId>3679433027182567292</baseSequenceId></LoginResponse></S:Body></S:Envelope>

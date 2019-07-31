@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class InventoryLoad {
+public class SubscriberStateChange {
 	// Initialize logger
 	private static Logger LOGGER = null;
 	static {
@@ -84,8 +84,7 @@ public class InventoryLoad {
 	// End sapi credential retrieval
 
 	// Create SOAP for Inventory Load
-	public static void createSEInventoryLoad(SOAPMessage soapMessage, String Annotation, String ExternalID,
-			String InventoryType) throws SOAPException {
+	public static void createSESubsStateChange(SOAPMessage soapMessage, String subscr_no) throws SOAPException {
 
 		SOAPPart soapPart = soapMessage.getSOAPPart();
 
@@ -98,8 +97,13 @@ public class InventoryLoad {
 		envelope.addNamespaceDeclaration(myNamespace, myNamespaceURI);
 
 		SOAPBody c1soapBody = envelope.getBody();
-		SOAPElement InvElementCreate = c1soapBody.addChildElement("InvElementCreate", myNamespace);
-		SOAPElement input = InvElementCreate.addChildElement("input", myNamespace);
+		SOAPElement SubscriberUpdateRatingStatus = c1soapBody.addChildElement("SubscriberUpdateRatingStatus",
+				myNamespace);
+		SOAPElement input = SubscriberUpdateRatingStatus.addChildElement("input", myNamespace);
+
+		SOAPElement ServerIdLocator = input.addChildElement("ServerIdLocator");
+		SOAPElement billingServerId = ServerIdLocator.addChildElement("billingServerId");
+		billingServerId.addTextNode("43");
 
 		SOAPElement realm = input.addChildElement("realm");
 		realm.addTextNode("sapi");
@@ -108,41 +112,32 @@ public class InventoryLoad {
 		SOAPElement userIdName = input.addChildElement("userIdName");
 		userIdName.addTextNode(username);
 
-		SOAPElement invElement = input.addChildElement("invElement");
+		SOAPElement subscriberId = input.addChildElement("subscriberId");
+		SOAPElement serviceInternalId = subscriberId.addChildElement("serviceInternalId");
+		serviceInternalId.addAttribute(setQname, "true");
+		serviceInternalId.addAttribute(changedQname, "true");
+		SOAPElement serviceInternalIdValue = serviceInternalId.addChildElement("value");
+		serviceInternalIdValue.addTextNode(subscr_no);
 
-		SOAPElement annotation1 = invElement.addChildElement("annotation1");
-		annotation1.addAttribute(setQname, "true");
-		annotation1.addAttribute(changedQname, "true");
+		// serviceInternalIdResets
 
-		SOAPElement value = annotation1.addChildElement("value");
-		value.addTextNode(Annotation);
+		SOAPElement serviceInternalIdResets = subscriberId.addChildElement("serviceInternalIdResets");
+		serviceInternalIdResets.addAttribute(setQname, "true");
+		serviceInternalIdResets.addAttribute(changedQname, "true");
+		SOAPElement serviceInternalIdResetsValue = serviceInternalIdResets.addChildElement("value");
+		serviceInternalIdResetsValue.addTextNode("0");
 
-		SOAPElement inventoryTypeId = invElement.addChildElement("inventoryTypeId");
-		inventoryTypeId.addAttribute(setQname, "true");
-		inventoryTypeId.addAttribute(changedQname, "true");
-
-		SOAPElement value1 = inventoryTypeId.addChildElement("value");
-		value1.addTextNode(InventoryType);
-
-		// msisdn: service number, primary, secondary
-		// ICCID: Serial number
-		// iMSI: Serial number
-		SOAPElement serviceNumber = invElement.addChildElement("serialNumber");
-		serviceNumber.addAttribute(setQname, "true");
-		serviceNumber.addAttribute(changedQname, "true");
-		SOAPElement value2 = serviceNumber.addChildElement("value");
-		value2.addTextNode(ExternalID);
-
+		SOAPElement postRatingState = input.addChildElement("postRatingState");
+		postRatingState.addTextNode("2");
 	}// End create Extended Data add envelope
 
 	// Create SOAP request
-	public static SOAPMessage createSRInventoryLoad(String soapAction, String Annotation, String ExternalID,
-			String InventoryType) throws Exception {
+	public static SOAPMessage createSRSubsStateChange(String soapAction, String subscr_no) throws Exception {
 
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
 
-		createSEInventoryLoad(soapMessage, Annotation, ExternalID, InventoryType);
+		createSESubsStateChange(soapMessage, subscr_no);
 
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapAction);
@@ -154,12 +149,12 @@ public class InventoryLoad {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 	// End create soap request
 
-	public void callInventoryLoad(String Annotation, String ExternalID, String InventoryType) {
+	public void callSubsStateChange(String subscr_no) {
 
 		try {
 
@@ -172,18 +167,18 @@ public class InventoryLoad {
 			 */
 
 			String soapEndpointUrl = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
-					+ "/services/InvElementService";
+					+ "/services/SubscriberService";
 			String soapAction = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
-					+ "/services/InvElementService.wsdl";
+					+ "/services/SubscriberService.wsdl";
 
 			// Create SOAP Connection
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Start Loading the inventory");
-			SOAPMessage soapResponse = soapConnection
-					.call(createSRInventoryLoad(soapAction, Annotation, ExternalID, InventoryType), soapEndpointUrl);
+			LOGGER.log(Level.INFO, "Start Activating subscr_no: " + subscr_no);
+			SOAPMessage soapResponse = soapConnection.call(createSRSubsStateChange(soapAction, subscr_no),
+					soapEndpointUrl);
 
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			soapResponse.writeTo(stream);
@@ -194,13 +189,13 @@ public class InventoryLoad {
 			// System.out.println();
 
 			// Writing to file for further use
-			soapResponse.writeTo(new FileOutputStream(new File("src/input/InvElementCreateResponse.xml")));
+			soapResponse.writeTo(new FileOutputStream(new File("src/input/SubsStateChangesResponse.xml")));
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
-			LOGGER.log(Level.INFO, "Loading --> " + ExternalID);
+			LOGGER.log(Level.INFO, "Activating  --> " + subscr_no);
 
-			File xmlresponse = new File("src/input/InvElementCreateResponse.xml");
+			File xmlresponse = new File("src/input/SubsStateChangesResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
 			Document doc = dbuilder.parse(xmlresponse);
@@ -241,7 +236,7 @@ public class InventoryLoad {
 
 			}
 
-			LOGGER.log(Level.INFO, "<-- End Processing externald id " + ExternalID);
+			LOGGER.log(Level.INFO, "<-- End Processing Subscr_no " + subscr_no);
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 

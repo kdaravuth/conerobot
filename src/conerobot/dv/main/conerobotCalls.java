@@ -31,6 +31,7 @@ import conerobotprj.dv.lib.RcterminstRateOverride;
 import conerobotprj.dv.lib.SubscriberCreationFromOffer;
 import conerobotprj.dv.lib.SubscriberInfoUpdate;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
+import conerobotprj.dv.lib.SubscriberStateChange;
 
 /**
  * @author khfighter
@@ -422,6 +423,25 @@ public class conerobotCalls {
 						LOGGER.log(Level.INFO, "--------------------------------------");
 
 						emasession.callLogOutEMASession(line.split("::")[0]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to disconnect subscriber's profile from HSS
+				else if (args[0].equals("SubsStateChange") == true) {
+
+					SubscriberStateChange ssc = new SubscriberStateChange();
+					ssc.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					// LOGGER.log(Level.INFO, "Session Refresh Starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+
+						ssc.callSubsStateChange(line.split("::")[0]);
 					}
 
 				}

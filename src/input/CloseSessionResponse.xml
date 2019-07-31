@@ -1,0 +1,1 @@
+<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><S:Fault><faultcode>S:Client</faultcode><faultstring>Cannot find dispatch method for {http://schemas.ericsson.com/cai3g1.2/}SessionId</faultstring></S:Fault></S:Body></S:Envelope>
