@@ -84,7 +84,11 @@ public class SubscriberStateChange {
 	// End sapi credential retrieval
 
 	// Create SOAP for Inventory Load
-	public static void createSESubsStateChange(SOAPMessage soapMessage, String subscr_no) throws SOAPException {
+	public static void createSESubsStateChange(SOAPMessage soapMessage, String MSISDN) throws SOAPException {
+
+		SubscriberRetrieveConstruct sr = new SubscriberRetrieveConstruct();
+		sr.retreiveCred(new File("src/config/soapconnection.cfg"));
+		sr.callSubscriberRetrieveService(MSISDN);
 
 		SOAPPart soapPart = soapMessage.getSOAPPart();
 
@@ -117,7 +121,7 @@ public class SubscriberStateChange {
 		serviceInternalId.addAttribute(setQname, "true");
 		serviceInternalId.addAttribute(changedQname, "true");
 		SOAPElement serviceInternalIdValue = serviceInternalId.addChildElement("value");
-		serviceInternalIdValue.addTextNode(subscr_no);
+		serviceInternalIdValue.addTextNode(sr.serviceInternalId);
 
 		// serviceInternalIdResets
 
@@ -125,19 +129,19 @@ public class SubscriberStateChange {
 		serviceInternalIdResets.addAttribute(setQname, "true");
 		serviceInternalIdResets.addAttribute(changedQname, "true");
 		SOAPElement serviceInternalIdResetsValue = serviceInternalIdResets.addChildElement("value");
-		serviceInternalIdResetsValue.addTextNode("0");
+		serviceInternalIdResetsValue.addTextNode(sr.serviceInternalIdResets);
 
 		SOAPElement postRatingState = input.addChildElement("postRatingState");
 		postRatingState.addTextNode("2");
 	}// End create Extended Data add envelope
 
 	// Create SOAP request
-	public static SOAPMessage createSRSubsStateChange(String soapAction, String subscr_no) throws Exception {
+	public static SOAPMessage createSRSubsStateChange(String soapAction, String MSISDN) throws Exception {
 
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
 
-		createSESubsStateChange(soapMessage, subscr_no);
+		createSESubsStateChange(soapMessage, MSISDN);
 
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapAction);
@@ -149,12 +153,12 @@ public class SubscriberStateChange {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 	// End create soap request
 
-	public void callSubsStateChange(String subscr_no) {
+	public void callSubsStateChange(String MSISDN) {
 
 		try {
 
@@ -166,9 +170,9 @@ public class SubscriberStateChange {
 			 * diot2
 			 */
 
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService";
-			String soapAction = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService.wsdl";
 
 			// Create SOAP Connection
@@ -176,8 +180,8 @@ public class SubscriberStateChange {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Start Activating subscr_no: " + subscr_no);
-			SOAPMessage soapResponse = soapConnection.call(createSRSubsStateChange(soapAction, subscr_no),
+			LOGGER.log(Level.INFO, "Start Activating subscr_no: " + MSISDN);
+			SOAPMessage soapResponse = soapConnection.call(createSRSubsStateChange(soapAction, MSISDN),
 					soapEndpointUrl);
 
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -193,7 +197,7 @@ public class SubscriberStateChange {
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
-			LOGGER.log(Level.INFO, "Activating  --> " + subscr_no);
+			LOGGER.log(Level.INFO, "Activating  --> " + MSISDN);
 
 			File xmlresponse = new File("src/input/SubsStateChangesResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
@@ -236,11 +240,14 @@ public class SubscriberStateChange {
 
 			}
 
-			LOGGER.log(Level.INFO, "<-- End Processing Subscr_no " + subscr_no);
+			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + MSISDN);
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 
 			LOGGER.log(Level.SEVERE, e.toString());
+			LOGGER.log(Level.INFO, "RESULT FAIL " + MSISDN);
+			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + MSISDN);
+			LOGGER.log(Level.INFO, "--------------------------------------");
 		}
 
 	}
