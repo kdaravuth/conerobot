@@ -223,7 +223,7 @@ public class SubscriberCreationFromOffer {
 		addressTypeIdValue.addTextNode("1");
 
 		SOAPElement effectiveDate = input.addChildElement("effectiveDate");
-		effectiveDate.addTextNode("2019-06-01T00:00:00.0");
+		effectiveDate.addTextNode("2019-08-07T00:00:00.0");
 
 		SOAPElement waiveActivation = input.addChildElement("waiveActivation");
 		waiveActivation.addTextNode("true");

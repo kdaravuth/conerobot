@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import conerobotprj.dv.lib.AccountContractRenew;
 import conerobotprj.dv.lib.AccountInfoGet;
 import conerobotprj.dv.lib.AccountInfoUpdate;
+import conerobotprj.dv.lib.BalanceLimitUpdate;
 import conerobotprj.dv.lib.EMAHSSDisconnection;
 import conerobotprj.dv.lib.EMAHSSSubscription;
 import conerobotprj.dv.lib.EMASessionLogout;
@@ -442,6 +443,24 @@ public class conerobotCalls {
 						LOGGER.log(Level.INFO, "--------------------------------------");
 
 						ssc.callSubsStateChange(line.split("::")[0]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to UPDATE BALANCE/CREDIT LIMIT
+				else if (args[0].equals("BalanceLimitUpdate") == true) {
+
+					BalanceLimitUpdate blu = new BalanceLimitUpdate();
+					blu.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// blu.callBalanceLimitUpdate(MSISDN, Amounttbupdated, UpdateFlag);
+						blu.callBalanceLimitUpdate(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
 					}
 
 				}

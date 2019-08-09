@@ -127,7 +127,7 @@ public class InventoryLoad {
 		// msisdn: service number, primary, secondary
 		// ICCID: Serial number
 		// iMSI: Serial number
-		SOAPElement serviceNumber = invElement.addChildElement("serialNumber");
+		SOAPElement serviceNumber = invElement.addChildElement("serviceNumber");
 		serviceNumber.addAttribute(setQname, "true");
 		serviceNumber.addAttribute(changedQname, "true");
 		SOAPElement value2 = serviceNumber.addChildElement("value");
