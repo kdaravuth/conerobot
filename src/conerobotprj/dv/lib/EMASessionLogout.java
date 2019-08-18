@@ -54,9 +54,11 @@ public class EMASessionLogout {
 		SOAPHeader emasoapHeader = envelope.getHeader();
 		SOAPElement SessionIdHead = emasoapHeader.addChildElement("SessionId", myNamespaceCai3);
 		SessionIdHead.addTextNode(session);
+//<cai3:Logout>
 
 		SOAPBody emasoapBody = envelope.getBody();
-		SOAPElement SessionIdBody = emasoapBody.addChildElement("SessionId", myNamespaceCai3);
+		SOAPElement emalogout = emasoapBody.addChildElement("Logout", myNamespaceCai3);
+		SOAPElement SessionIdBody = emalogout.addChildElement("SessionId", myNamespaceCai3);
 		SessionIdBody.addTextNode(session);
 
 	}// End create Extended Data add envelope
@@ -79,7 +81,7 @@ public class EMASessionLogout {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 	// End create soap request
@@ -105,7 +107,7 @@ public class EMASessionLogout {
 			String message = new String(stream.toByteArray());
 
 			// Print the SOAP Response
-			LOGGER.log(Level.FINEST, "Response SOAP..." + message);
+			LOGGER.log(Level.INFO, "Response SOAP..." + message);
 			// System.out.println();
 
 			// Writing to file for further use

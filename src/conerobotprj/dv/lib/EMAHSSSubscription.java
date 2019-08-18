@@ -208,7 +208,7 @@ public class EMAHSSSubscription {
 			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + imsi);
 			EMASessionLogout logout = new EMASessionLogout();
 			// Log Out
-			logout.callLogOutEMASession(EMAHSSDisconnection.SessionId);
+			logout.callLogOutEMASession(SessionId);
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 

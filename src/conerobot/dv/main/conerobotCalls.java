@@ -22,6 +22,8 @@ import conerobotprj.dv.lib.EMASessionLogout;
 import conerobotprj.dv.lib.EMASessionRefresh;
 import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.InventoryLoad;
+import conerobotprj.dv.lib.LRAttach;
+import conerobotprj.dv.lib.NCAMobile;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
@@ -461,6 +463,73 @@ public class conerobotCalls {
 						LOGGER.log(Level.INFO, "--------------------------------------");
 						// blu.callBalanceLimitUpdate(MSISDN, Amounttbupdated, UpdateFlag);
 						blu.callBalanceLimitUpdate(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
+					}
+
+				}
+				// End Next Function
+				// Calling function to upgrade from 3g to HLR
+				else if (args[0].equals("LTEUpgrade") == true) {
+
+					EMAHSSSubscription emasub = new EMAHSSSubscription();
+					EMAHSSDisconnection emadis = new EMAHSSDisconnection();
+
+					LOGGER.log(Level.INFO, "LTE upgrades...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// emadis.callHSSDisconnection(imsi);
+						emadis.callHSSDisconnection(line.split("::")[0]);
+						// emasub.callHSSSubscription(imsi, MSISDN, KI, LTEProfile, Paymentmode);
+						emasub.callHSSSubscription(line.split("::")[0], line.split("::")[1], line.split("::")[2],
+								line.split("::")[3], line.split("::")[4]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to Redirect RC/NRC liability
+				else if (args[0].equals("LRAttach") == true) {
+
+					LRAttach LR = new LRAttach();
+					LR.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Liability redirection starts");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// LR.callLRAttach(SourceMSISDN, TargetAccount, LRtplID);
+						LR.callLRAttach(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to Redirect RC/NRC liability
+				else if (args[0].equals("NCAMobile") == true) {
+
+					NCAMobile mob = new NCAMobile();
+					mob.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Subscriber Creation Bulk starts");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// mob.callNCAMobile(ModeFlag, PrimaryOfferId, ParentAccount, Fname, Lname,
+						// CompanyName, ID, IDType, IDExpiry, NotifNumber, Address1,
+						// Address2, Address3, Address4, city, state, country, MSISDN, ICCID, IMSI);
+						mob.callNCAMobile(line.split("::")[0], line.split("::")[1], line.split("::")[2],
+								line.split("::")[3], line.split("::")[4], line.split("::")[5], line.split("::")[6],
+								line.split("::")[7], line.split("::")[8], line.split("::")[9], line.split("::")[10],
+								line.split("::")[11], line.split("::")[12], line.split("::")[13], line.split("::")[14],
+								line.split("::")[15], line.split("::")[16], line.split("::")[17], line.split("::")[18],
+								line.split("::")[19]);
+
 					}
 
 				}
