@@ -171,9 +171,9 @@ public class InventoryLoad {
 			 * diot2
 			 */
 
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/InvElementService";
-			String soapAction = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/InvElementService.wsdl";
 
 			// Create SOAP Connection

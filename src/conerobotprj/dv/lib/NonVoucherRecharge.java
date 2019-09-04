@@ -1,6 +1,3 @@
-/**
- * 
- */
 package conerobotprj.dv.lib;
 
 import java.io.BufferedReader;
@@ -35,11 +32,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/**
- * @author khfighter
- *
- */
-public class PrimaryOfferSwap {
+public class NonVoucherRecharge {
 	// Initialize logger
 	private static Logger LOGGER = null;
 	static {
@@ -73,13 +66,13 @@ public class PrimaryOfferSwap {
 				lines.add(line);
 			}
 			realm = lines.get(0);
-			LOGGER.log(Level.INFO, "Retrieving realm...");
+			LOGGER.log(Level.FINEST, "Retrieving realm...");
 
 			username = lines.get(1);
-			LOGGER.log(Level.INFO, "Retrieving username...");
+			LOGGER.log(Level.FINEST, "Retrieving username...");
 
 			token = lines.get(2);
-			LOGGER.log(Level.INFO, "Retrieving token...");
+			LOGGER.log(Level.FINEST, "Retrieving token...");
 
 			bfcred.close();
 
@@ -89,17 +82,10 @@ public class PrimaryOfferSwap {
 	}
 
 	// End sapi credential retrieval
-	// Create SOAP for Primary offer Swapping
-	public static void createSEPrimaryOfferSwapping(SOAPMessage soapMessage, String MSISDN, String TargetOfferID)
-			throws SOAPException {
 
-		// Get subscr_no and account no from MSISDN - using subscriber Retrieve
-		SubscriberRetrieveConstruct src = new SubscriberRetrieveConstruct();
-		src.retreiveCred(new File("src/config/soapconnection.cfg"));
-		src.callSubscriberRetrieveService(MSISDN);
-		// END: Get subscr_no and subsc no reset from MSISDN - using subscriber Retrieve
-		// LOGGER.log(Level.INFO, src.serviceInternalId);
-		// SOAP Envelope
+	// Create SOAP for Contract Renewal -- Customer_DOB
+	public static void createSENVR(SOAPMessage soapMessage, String MSISDN, String Amount, String Comment, String Source)
+			throws SOAPException {
 
 		SOAPPart soapPart = soapMessage.getSOAPPart();
 
@@ -112,8 +98,8 @@ public class PrimaryOfferSwap {
 		envelope.addNamespaceDeclaration(myNamespace, myNamespaceURI);
 
 		SOAPBody c1soapBody = envelope.getBody();
-		SOAPElement SubscriberSwapPrimaryOffer = c1soapBody.addChildElement("SubscriberSwapPrimaryOffer", myNamespace);
-		SOAPElement input = SubscriberSwapPrimaryOffer.addChildElement("input", myNamespace);
+		SOAPElement SubscriberUpdate = c1soapBody.addChildElement("NonVoucherRechargeSubscriber", myNamespace);
+		SOAPElement input = SubscriberUpdate.addChildElement("input", myNamespace);
 
 		SOAPElement realm = input.addChildElement("realm");
 		realm.addTextNode("sapi");
@@ -122,58 +108,44 @@ public class PrimaryOfferSwap {
 		SOAPElement userIdName = input.addChildElement("userIdName");
 		userIdName.addTextNode(username);
 
-		SOAPElement subscriberId = input.addChildElement("subscriberId");
-		SOAPElement attribs = subscriberId.addChildElement("attribs");
+		SOAPElement subscriberID = input.addChildElement("subscriberID");
+		SOAPElement attribs = subscriberID.addChildElement("attribs");
 		attribs.addTextNode("0");
 
-		SOAPElement serviceInternalId = subscriberId.addChildElement("serviceInternalId");
-		serviceInternalId.addAttribute(setQname, "true");
-		serviceInternalId.addAttribute(changedQname, "true");
-		SOAPElement serviceInternalIdValue = serviceInternalId.addChildElement("value");
-		serviceInternalIdValue.addTextNode(src.serviceInternalId);
+		SOAPElement subscriberId = subscriberID.addChildElement("subscriberId");
+		subscriberId.addAttribute(setQname, "true");
+		subscriberId.addAttribute(changedQname, "true");
+		SOAPElement subscriberIdValue = subscriberId.addChildElement("value");
+		subscriberIdValue.addTextNode(MSISDN);
 
-		SOAPElement serviceInternalIdResets = subscriberId.addChildElement("serviceInternalIdResets");
-		SOAPElement serviceInternalIdResetsValue = serviceInternalIdResets.addChildElement("value");
-		serviceInternalIdResets.addAttribute(setQname, "true");
-		serviceInternalIdResets.addAttribute(changedQname, "true");
-		serviceInternalIdResetsValue.addTextNode("0");
+		SOAPElement subscriberExternalIdType = subscriberID.addChildElement("subscriberExternalIdType");
+		subscriberExternalIdType.addAttribute(setQname, "true");
+		subscriberExternalIdType.addAttribute(changedQname, "true");
+		SOAPElement subscriberExternalIdTypeValue = subscriberExternalIdType.addChildElement("value");
+		subscriberExternalIdTypeValue.addTextNode("1");
 
-		SOAPElement doPreSwapCheckOnly = input.addChildElement("doPreSwapCheckOnly");
-		doPreSwapCheckOnly.addTextNode("0");
-		SOAPElement waiveActivation = input.addChildElement("waiveActivation");
-		waiveActivation.addTextNode("0");
-		SOAPElement waiveTermination = input.addChildElement("waiveTermination");
-		waiveTermination.addTextNode("0");
-		SOAPElement waiveUnmetCommitment = input.addChildElement("waiveUnmetCommitment");
-		waiveUnmetCommitment.addTextNode("0");
+		SOAPElement faceValue = subscriberID.addChildElement("faceValue");
+		faceValue.addTextNode(Amount);
 
-		SOAPElement newPrimaryOfferId = input.addChildElement("newPrimaryOfferId");
-		SOAPElement attribsP = newPrimaryOfferId.addChildElement("attribs");
-		attribsP.addTextNode("0");
+		SOAPElement unitType = subscriberID.addChildElement("unitType");
+		unitType.addTextNode("1");
 
-		SOAPElement offerId = newPrimaryOfferId.addChildElement("offerId");
-		SOAPElement offerIdValue = offerId.addChildElement("value");
-		offerIdValue.addTextNode(TargetOfferID);
+		SOAPElement comments = subscriberID.addChildElement("comments");
+		comments.addTextNode(Comment);
 
-		SOAPElement autoCommitOrder = input.addChildElement("autoCommitOrder");
-		autoCommitOrder.addTextNode("1");
-		SOAPElement generateWorkflow = input.addChildElement("generateWorkflow");
-		generateWorkflow.addTextNode("false");
-
-		SOAPElement extObject = input.addChildElement("extObject");
-		SOAPElement attribsObj = extObject.addChildElement("attribs");
-		attribsObj.addTextNode("0");
+		SOAPElement originatingApp = subscriberID.addChildElement("originatingApp");
+		originatingApp.addTextNode(Source);
 
 	}// End create Extended Data add envelope
 
 	// Create SOAP request
-	public static SOAPMessage createSRPrimaryOfferSwapping(String soapAction, String MSISDN, String TargetOfferID)
-			throws Exception {
+	public static SOAPMessage createSRNVR(String soapAction, String MSISDN, String Amount, String Comment,
+			String Source) throws Exception {
 
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
 
-		createSEPrimaryOfferSwapping(soapMessage, MSISDN, TargetOfferID);
+		createSENVR(soapMessage, MSISDN, Amount, Comment, Source);
 
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapAction);
@@ -186,13 +158,11 @@ public class PrimaryOfferSwap {
 
 		/* Print the request message, just for debugging purposes */
 		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
-
 		return soapMessage;
 	}
 	// End create soap request
 
-	// Call primary offer swap
-	public void callPrimaryOfferSwapping(String MSISDN, String TargetOfferID) {
+	public void callNVR(String MSISDN, String Amount, String Comment, String Source) {
 
 		try {
 
@@ -204,37 +174,36 @@ public class PrimaryOfferSwap {
 			 * diot2
 			 */
 
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
-					+ "/services/SubscriberService";
-			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
-					+ "/services/SubscriberService.wsdl";
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+					+ "/services/NonVoucherRechargeService";
+			String soapAction = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+					+ "/services/NonVoucherRechargeService.wsdl";
 
 			// Create SOAP Connection
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Calling Primary Offer Swap...");
-
-			SOAPMessage soapResponse = soapConnection
-					.call(createSRPrimaryOfferSwapping(soapAction, MSISDN, TargetOfferID), soapEndpointUrl);
+			LOGGER.log(Level.INFO, "Calling Account Contract Renew...");
+			SOAPMessage soapResponse = soapConnection.call(createSRNVR(soapAction, MSISDN, Amount, Comment, Source),
+					soapEndpointUrl);
 
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			soapResponse.writeTo(stream);
 			String message = new String(stream.toByteArray());
 
 			// Print the SOAP Response
-			LOGGER.log(Level.FINEST, "Response SOAP -->" + message);
+			LOGGER.log(Level.FINEST, "Response SOAP..." + message);
 			// System.out.println();
 
 			// Writing to file for further use
-			soapResponse.writeTo(new FileOutputStream(new File("src/input/PrimaryOfferSwapResponse.xml")));
+			soapResponse.writeTo(new FileOutputStream(new File("src/input/NVRResponse.xml")));
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
 			LOGGER.log(Level.INFO, "PROCESSING MSISDN --> " + MSISDN);
 
-			File xmlresponse = new File("src/input/PrimaryOfferSwapResponse.xml");
+			File xmlresponse = new File("src/input/NVRResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
 			Document doc = dbuilder.parse(xmlresponse);
@@ -246,8 +215,7 @@ public class PrimaryOfferSwap {
 			Element el = (Element) outputlist.item(0);
 			NodeList childnodes = el.getChildNodes();
 
-			// LOGGER.log(Level.INFO, "Childnodes " + childnodes.item(0).getNodeName());
-
+			// LOGGER.log( Level.INFO, "Childnodes "+ childnodes.item(0).getNodeName());
 			if (childnodes.item(0).getNodeName().equals("S:Body")) {
 
 				for (int i = 0; i < childnodes.getLength(); i++) {
@@ -256,33 +224,24 @@ public class PrimaryOfferSwap {
 					if (child.getNodeType() == Node.ELEMENT_NODE) {
 						if (childnodes.item(i).getTextContent().trim() != "") {
 
-							LOGGER.log(Level.SEVERE,
-									"RESULT FAIL OFFERSWAP: " + i + "::" + childnodes.item(i).getNodeName() + "::"
-											+ childnodes.item(i).getTextContent().trim());
+							LOGGER.log(Level.SEVERE, "RESULT FAIL: " + i + "::" + childnodes.item(i).getNodeName()
+									+ "::" + childnodes.item(i).getTextContent().trim());
 						}
 					}
 				}
 			} else {
+				for (int i = 0; i < childnodes.getLength(); i++) {
 
-				NodeList outputSubInfoList = doc.getElementsByTagName("subscriber");
-				Element elSubInfo = (Element) outputSubInfoList.item(0);
-				NodeList childnodesSubInfo = elSubInfo.getChildNodes();
-				String tempSubInfo = "";
-
-				for (int i = 0; i < childnodesSubInfo.getLength(); i++) {
-
-					Node child = childnodesSubInfo.item(i);
-					// LOGGER.log(Level.INFO, "Node Name: " + child.getNodeName() + " Node Type: "
-					// + childnodesSubInfo.item(i).getTextContent().trim());
-
+					Node child = childnodes.item(i);
 					if (child.getNodeType() == Node.ELEMENT_NODE) {
-						if (childnodesSubInfo.item(i).getTextContent().trim() != "") {
-							tempSubInfo += childnodesSubInfo.item(i).getNodeName() + "="
-									+ childnodesSubInfo.item(i).getTextContent().trim() + " ; ";
+						if (childnodes.item(i).getTextContent().trim() != "") {
+
+							LOGGER.log(Level.INFO, "RESULT SUCCESS: " + i + "::" + childnodes.item(i).getNodeName()
+									+ "::" + childnodes.item(i).getTextContent().trim());
 						}
 					}
 				}
-				LOGGER.log(Level.INFO, "RESULT SUCCESS OFFER SWAP: " + tempSubInfo);
+
 			}
 
 			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + MSISDN);
@@ -290,10 +249,11 @@ public class PrimaryOfferSwap {
 		} catch (Exception e) {
 
 			LOGGER.log(Level.SEVERE, e.toString());
+
 		}
 
 	}
 
-	// End call Primary offer Swap
+	// End call Account Contract Renew
 
 }

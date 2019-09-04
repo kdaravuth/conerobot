@@ -24,6 +24,7 @@ import conerobotprj.dv.lib.ExtendedDataUpdate;
 import conerobotprj.dv.lib.InventoryLoad;
 import conerobotprj.dv.lib.LRAttach;
 import conerobotprj.dv.lib.NCAMobile;
+import conerobotprj.dv.lib.NonVoucherRecharge;
 import conerobotprj.dv.lib.NrcAddConstruct;
 import conerobotprj.dv.lib.OfferAddConstruct;
 import conerobotprj.dv.lib.PaymentReversalConstruct;
@@ -35,6 +36,7 @@ import conerobotprj.dv.lib.SubscriberCreationFromOffer;
 import conerobotprj.dv.lib.SubscriberInfoUpdate;
 import conerobotprj.dv.lib.SubscriberRetrieveConstruct;
 import conerobotprj.dv.lib.SubscriberStateChange;
+import conerobotprj.dv.lib.parentAccountUpdate;
 
 /**
  * @author khfighter
@@ -115,8 +117,8 @@ public class conerobotCalls {
 					while ((line = bfrdr.readLine()) != null) {
 
 						LOGGER.log(Level.INFO, "--------------------------------------");
-						LOGGER.log(Level.INFO, "Processing MSISDN: " + line.split(",")[0]);
-						oac.callingOfferAdd(line.split(",")[0], line.split(",")[1], line.split(",")[2]);
+						LOGGER.log(Level.INFO, "Processing MSISDN: " + line.split("::")[0]);
+						oac.callingOfferAdd(line.split("::")[0], line.split("::")[1], line.split("::")[2]);
 
 					}
 				}
@@ -530,6 +532,44 @@ public class conerobotCalls {
 								line.split("::")[15], line.split("::")[16], line.split("::")[17], line.split("::")[18],
 								line.split("::")[19]);
 
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to Redirect RC/NRC liability
+				else if (args[0].equals("NVR") == true) {
+
+					NonVoucherRecharge nvr = new NonVoucherRecharge();
+					nvr.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Non voucher Recharge starts...");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// nvr.callNVR(MSISDN, Amount, Comment, Source);
+						nvr.callNVR(line.split("::")[0], line.split("::")[1], line.split("::")[2], line.split("::")[3]);
+					}
+
+				}
+				// End Next Function
+
+				// Calling function to update parent account
+				else if (args[0].equals("parentaccountupdate") == true) {
+
+					parentAccountUpdate pau = new parentAccountUpdate();
+					pau.retreiveCred(new File("src/config/soapconnection.cfg"));
+
+					LOGGER.log(Level.INFO, "Parent Account Update Starts");
+					BufferedReader bfrdr = new BufferedReader(new FileReader("src/input/" + args[1]));
+					String line;
+					while ((line = bfrdr.readLine()) != null) {
+
+						LOGGER.log(Level.INFO, "--------------------------------------");
+						// pau.callingAccountInfoUpdate(MSISDN, ParentAccount);
+						pau.callingParentAccountUpdate(line.split("::")[0], line.split("::")[1]);
 					}
 
 				}

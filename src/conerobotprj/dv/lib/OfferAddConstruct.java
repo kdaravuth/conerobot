@@ -213,9 +213,9 @@ public class OfferAddConstruct {
 			// http://10.128.202.137:8001: prod
 			// http://10.1.38.11:8001: diot 1
 			// 10.1.38.21: diot2
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService";
-			String soapAction = (new BufferedReader(new FileReader("src\\Config\\sapi.cfg")).readLine())
+			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/SubscriberService.wsdl";
 
 			// Create SOAP Connection
@@ -235,13 +235,13 @@ public class OfferAddConstruct {
 			LOGGER.log(Level.FINEST, "Receiving SOAP Response " + message);
 
 			// Writing to file for further use
-			soapResponse.writeTo(new FileOutputStream(new File("src\\input\\SubscriberAddOfferInstanceResponse.xml")));
+			soapResponse.writeTo(new FileOutputStream(new File("src/input/SubscriberAddOfferInstanceResponse.xml")));
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
 			LOGGER.log(Level.INFO, "Simplified Results --> " + MSISDN);
 
-			File xmlresponse = new File("src\\input\\SubscriberAddOfferInstanceResponse.xml");
+			File xmlresponse = new File("src/input/SubscriberAddOfferInstanceResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dbuilder = dbuilderfac.newDocumentBuilder();
 			Document doc = dbuilder.parse(xmlresponse);
