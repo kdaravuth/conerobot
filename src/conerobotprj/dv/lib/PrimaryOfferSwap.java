@@ -257,7 +257,8 @@ public class PrimaryOfferSwap {
 						if (childnodes.item(i).getTextContent().trim() != "") {
 
 							LOGGER.log(Level.SEVERE,
-									"RESULT FAIL OFFERSWAP: " + i + "::" + childnodes.item(i).getNodeName() + "::"
+									"RESULT FAIL OFFERSWAP: " + MSISDN + "::" + i + "::"
+											+ childnodes.item(i).getNodeName() + "::"
 											+ childnodes.item(i).getTextContent().trim());
 						}
 					}
@@ -282,7 +283,7 @@ public class PrimaryOfferSwap {
 						}
 					}
 				}
-				LOGGER.log(Level.INFO, "RESULT SUCCESS OFFER SWAP: " + tempSubInfo);
+				LOGGER.log(Level.INFO, "RESULT SUCCESS OFFER SWAP: " + MSISDN + "::" + tempSubInfo);
 			}
 
 			LOGGER.log(Level.INFO, "<-- End Processing MSISDN " + MSISDN);

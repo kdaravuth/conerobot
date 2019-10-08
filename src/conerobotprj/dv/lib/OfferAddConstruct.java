@@ -261,8 +261,9 @@ public class OfferAddConstruct {
 					if (child.getNodeType() == Node.ELEMENT_NODE) {
 						if (childnodes.item(i).getTextContent().trim() != "") {
 
-							LOGGER.log(Level.SEVERE, "FAIL: " + "::" + childnodes.item(i).getNodeName() + "::"
-									+ childnodes.item(i).getTextContent().trim());
+							LOGGER.log(Level.SEVERE,
+									"RESULT SUCCESS " + MSISDN + "::" + "::" + childnodes.item(i).getNodeName() + "::"
+											+ childnodes.item(i).getTextContent().trim());
 						}
 					}
 				}
@@ -287,7 +288,7 @@ public class OfferAddConstruct {
 					}
 				}
 
-				LOGGER.log(Level.INFO, "SUCCESS: " + tempSubInfo);
+				LOGGER.log(Level.INFO, "RESULT SUCCESS : " + MSISDN + "::" + tempSubInfo);
 
 			}
 

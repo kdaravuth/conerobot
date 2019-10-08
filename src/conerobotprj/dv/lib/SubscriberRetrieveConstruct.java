@@ -249,7 +249,7 @@ public class SubscriberRetrieveConstruct {
 					}
 				}
 
-				LOGGER.log(Level.FINEST, tempSubInfo);
+				LOGGER.log(Level.INFO, tempSubInfo);
 
 			}
 
