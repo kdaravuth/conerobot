@@ -1,0 +1,59 @@
+#
+interface GigabitEthernet1/0/4.2609703
+ description ***2672412495-G4S_VBNS SUBSCRIBER (G)***
+ control-vid 300 qinq-termination
+ qinq termination pe-vid 2609 ce-vid 703
+ l2 binding vsi xDSL_VBNS
+ qos-profile goldplus2048_qos inbound identifier none
+ qos-profile goldplus2048_qos outbound identifier none
+#
+#
+interface GigabitEthernet1/0/2.409508
+ description ***2676874344 6874344-ISOMETRIC.HOTEL.CONV(B)***
+ user-vlan 508 qinq 409
+ bas
+ #
+  access-type layer2-subscriber default-domain pre-authentication bronze_512_dom
+  authentication-method fast
+  qos-profile bronze512_qos identifier none
+ #
+#
+interface GigabitEthernet1/0/0.653110
+ description ***2672420920-H 3 HOLDINGS ***
+ user-vlan 3110 qinq 65
+ bas
+ #
+  access-type layer2-subscriber default-domain pre-authentication silver_1024_dom
+  authentication-method fast
+  qos-profile silver1024_qos identifier none
+ #
+#
+interface GigabitEthernet1/0/2.159267
+ description ***2676862214-CHARLES TLAGAE ATTORNEYS8***
+ user-vlan 267 qinq 159
+ bas
+ #
+  access-type layer2-subscriber default-domain pre-authentication gold_plus_2048_dom
+  authentication-method fast
+  qos-profile goldplus2048_qos identifier none
+ #
+#
+interface GigabitEthernet1/0/0.438766
+ description ***2672415279-MIN OF INFORMATION SCI(20)***
+ user-vlan 766 qinq 438
+ bas
+ #
+  access-type layer2-subscriber default-domain pre-authentication diamond_plus_20480_dom
+  authentication-method fast
+  qos-profile diamondplus20480_qos identifier none
+ #
+#
+interface GigabitEthernet1/0/1.3671250
+ description ***2676211005-CHRYSTALIS 26 PTY(G)***
+ user-vlan 1250 qinq 367
+ bas
+ #
+  access-type layer2-subscriber default-domain pre-authentication gold_plus_2048_dom
+  authentication-method fast
+  qos-profile goldplus2048_qos identifier none
+ #

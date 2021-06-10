@@ -1,0 +1,19 @@
+9572549::26773001202:: ::Plot 1197 Block 1::72::P O Box  40391 G::Gaborone
+9584024::26773130122:: ::PLOT 4453, Tati Siding::72::P O Box 200 Fran::FRANCISTOWN
+9888569::26773006001:: ::Plot 28327, Block 3, Gaborone::72::P O 45711, Gabor::Gaborone
+9888599::26773005516:: ::::72::PO Box 3442 , Ma::Palapye
+9473156::26773000719:: ::Plot 50350 Khama Crescent - Megaleng::72::PO Box 700::Gaborone
+9888668::26773005689:: ::Plot 14788, Satelite, Francistown::72::PO Box 423, Masu::Gaborone
+9888603::26773005517:: ::Plot 8862, Mogoditshane Block 9::72::P O Box 131, Lec::Mogoditshane
+9597866::26773007030:: ::Plot 50350,Khama Crescent,Megaleng::72::Box 1054::Gaborone
+9888601::26773005518:: ::Plot 18309,Selepa, Francistown::72::PO Box 32 Machan::Gaborone
+9888624::26773005923:: ::Smodern ward, Mogoditshane::72::PO BOX 613AB, Se::Gaborone
+9888893::26773006010:: ::Plot 8177, Mogoditshane::72::PO Box 4219, Gab::Gaborone
+9326234::26773133244:: ::Plot 27277 Block 3 ::72::P O Box  5129 Ga::Gaborone
+3160388::26773324324:: ::Plot 22350::72::Box 41170::Gaborone
+9888597::26773005521:: ::Plot 34924, Lotsane ward, Palapye::72::P O Box 175, Pal::Palapye
+9598677::26773005566:: ::Plot 32106 , Phakalane::72::P O Box 47096, G::Phakalane
+9888857::26773005082:: ::Plot 62772, Tsholofelo East, Gaborone::72::PO Box 60012, Ga::Gaborone
+9889481::26773001438:: ::Plot 7329 Maratanang Ward::72::P O Box 2744 Gab::Gaborone
+9396476::26773007866:: ::Plot 11050 Tawana::72::P O Box 40258 ga::GABORONE
+9365035::26773390992:: ::PO Box::72::::Gaborone

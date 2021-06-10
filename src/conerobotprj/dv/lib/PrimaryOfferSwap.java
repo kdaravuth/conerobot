@@ -152,13 +152,15 @@ public class PrimaryOfferSwap {
 		attribsP.addTextNode("0");
 
 		SOAPElement offerId = newPrimaryOfferId.addChildElement("offerId");
+		offerId.addAttribute(setQname, "true");
+		offerId.addAttribute(changedQname, "true");
 		SOAPElement offerIdValue = offerId.addChildElement("value");
 		offerIdValue.addTextNode(TargetOfferID);
 
 		SOAPElement autoCommitOrder = input.addChildElement("autoCommitOrder");
 		autoCommitOrder.addTextNode("1");
 		SOAPElement generateWorkflow = input.addChildElement("generateWorkflow");
-		generateWorkflow.addTextNode("false");
+		generateWorkflow.addTextNode("0");
 
 		SOAPElement extObject = input.addChildElement("extObject");
 		SOAPElement attribsObj = extObject.addChildElement("attribs");

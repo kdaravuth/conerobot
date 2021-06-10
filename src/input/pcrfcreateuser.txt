@@ -1,0 +1,2 @@
+00001::A9876192::Faster_4096::MSU01-Test::Mac-test
+externalID::Accountwith(A/W)::Speed::BBuserID::MacAddress

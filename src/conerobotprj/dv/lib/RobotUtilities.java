@@ -5,6 +5,9 @@ package conerobotprj.dv.lib;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,5 +65,18 @@ public class RobotUtilities {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	// Oracle db connect
+	public Connection dbconnection(String Driver, String ConnectionString, String dbUser, String dbPassword) throws ClassNotFoundException, SQLException {
+		// step1 load the driver class
+				//	Class.forName("oracle.jdbc.driver.OracleDriver");
+		Class.forName(Driver);
+
+		// step2 create the connection object
+		//Connection con = DriverManager.getConnection("jdbc:oracle:thin:@10.6.1.203:1521:brs", "brssystem","btcchamp");
+		Connection con = DriverManager.getConnection(ConnectionString, dbUser,dbPassword);
+		
+		return con;
 	}
 }

@@ -61,6 +61,8 @@ public class OfferAddConstruct {
 	public static String realm = "";
 	public static String username = "";
 	public static String token = "";
+	public static String tsubscrno = "";
+	public static String tsubscrnoreset  = "";
 
 	// read credential
 	public void retreiveCred(File filepath) {
@@ -106,6 +108,8 @@ public class OfferAddConstruct {
 		SubscriberRetrieveConstruct src = new SubscriberRetrieveConstruct();
 		src.retreiveCred(new File("src/config/soapconnection.cfg"));
 		src.callSubscriberRetrieveService(MSISDN);
+		tsubscrno = src.serviceInternalId;
+		tsubscrnoreset = src.serviceInternalIdResets;
 
 		// LOGGER.log(Level.INFO, "serviceInternalId" + src.serviceInternalId);
 		// LOGGER.log(Level.INFO, "serviceInternalIdResets" +
@@ -223,7 +227,7 @@ public class OfferAddConstruct {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Calling Offer Add...");
+			LOGGER.log(Level.INFO, "-----------Offer Adding Process----------");
 			SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(soapAction, MSISDN, OfferID, isWorkflow),
 					soapEndpointUrl);
 
@@ -239,7 +243,7 @@ public class OfferAddConstruct {
 			soapConnection.close();
 
 			// Read Subscriber retrieve response from temp xml file
-			LOGGER.log(Level.INFO, "Simplified Results --> " + MSISDN);
+			LOGGER.log(Level.INFO, "Start Processing --> " + MSISDN);
 
 			File xmlresponse = new File("src/input/SubscriberAddOfferInstanceResponse.xml");
 			DocumentBuilderFactory dbuilderfac = DocumentBuilderFactory.newInstance();
@@ -262,7 +266,7 @@ public class OfferAddConstruct {
 						if (childnodes.item(i).getTextContent().trim() != "") {
 
 							LOGGER.log(Level.SEVERE,
-									"RESULT SUCCESS " + MSISDN + "::" + "::" + childnodes.item(i).getNodeName() + "::"
+									"RESULT FAIL::" + tsubscrno+";" +tsubscrnoreset+ "::" + childnodes.item(i).getNodeName() + "::"
 											+ childnodes.item(i).getTextContent().trim());
 						}
 					}
@@ -288,7 +292,7 @@ public class OfferAddConstruct {
 					}
 				}
 
-				LOGGER.log(Level.INFO, "RESULT SUCCESS : " + MSISDN + "::" + tempSubInfo);
+				LOGGER.log(Level.INFO, "RESULT SUCCESS::" + tsubscrno+";" +tsubscrnoreset+ "::" + tempSubInfo);
 
 			}
 

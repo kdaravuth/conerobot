@@ -132,7 +132,21 @@ public class InventoryLoad {
 		serviceNumber.addAttribute(changedQname, "true");
 		SOAPElement value2 = serviceNumber.addChildElement("value");
 		value2.addTextNode(ExternalID);
-
+		
+		/*//primaryNumber
+		//For MSISDN
+		SOAPElement primaryNumber = invElement.addChildElement("primaryCode");
+		primaryNumber.addAttribute(setQname, "true");
+		primaryNumber.addAttribute(changedQname, "true");
+		SOAPElement primaryNumbervalue = primaryNumber.addChildElement("value");
+		primaryNumbervalue.addTextNode("267");
+		
+		SOAPElement secondaryCode = invElement.addChildElement("secondaryCode");
+		secondaryCode.addAttribute(setQname, "true");
+		secondaryCode.addAttribute(changedQname, "true");
+		SOAPElement secondaryCodevalue = secondaryCode.addChildElement("value");
+		secondaryCodevalue.addTextNode("76");*/
+		//END For MSISDN
 	}// End create Extended Data add envelope
 
 	// Create SOAP request
@@ -181,7 +195,7 @@ public class InventoryLoad {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			LOGGER.log(Level.INFO, "Start Loading the inventory");
+			LOGGER.log(Level.INFO, "Start Loading the inventory" + ExternalID);
 			SOAPMessage soapResponse = soapConnection
 					.call(createSRInventoryLoad(soapAction, Annotation, ExternalID, InventoryType), soapEndpointUrl);
 

@@ -113,17 +113,17 @@ public class PostBillAdj {
 		SOAPElement securityToken = input.addChildElement("securityToken");
 		securityToken.addTextNode(token);
 		SOAPElement userIdName = input.addChildElement("userIdName");
-		userIdName.addTextNode(username);
+		userIdName.addTextNode("RCS");
 		SOAPElement adjustment = input.addChildElement("adjustment");
 		SOAPElement attribs = adjustment.addChildElement("attribs");
 		attribs.addTextNode("0");
 
 		SOAPElement accountInternalId = adjustment.addChildElement("accountInternalId");
-		accountInternalId.addAttribute(changedQname, "true");
-		accountInternalId.addAttribute(setQname, "true");
+		accountInternalId.addAttribute(changedQname, "false");
+		accountInternalId.addAttribute(setQname, "false");
 		SOAPElement accountInternalIdValue = accountInternalId.addChildElement("value");
 		accountInternalIdValue.addTextNode(AccountNo);
-
+		
 		SOAPElement adjReasonCode = adjustment.addChildElement("adjReasonCode");
 		adjReasonCode.addAttribute(setQname, "true");
 		adjReasonCode.addAttribute(changedQname, "true");
@@ -142,12 +142,7 @@ public class PostBillAdj {
 		SOAPElement annotationValue = annotation.addChildElement("value");
 		annotationValue.addTextNode(vannotation);
 
-		SOAPElement openItemId = adjustment.addChildElement("openItemId");
-		openItemId.addAttribute(setQname, "true");
-		openItemId.addAttribute(changedQname, "true");
-		SOAPElement openItemIdValue = openItemId.addChildElement("value");
-		openItemIdValue.addTextNode("1");
-
+		
 		SOAPElement origBillRefNo = adjustment.addChildElement("origBillRefNo");
 		origBillRefNo.addAttribute(setQname, "true");
 		origBillRefNo.addAttribute(changedQname, "true");
@@ -161,24 +156,40 @@ public class PostBillAdj {
 		origBillRefResetsValue.addTextNode(vorigBillRefResets);
 
 		SOAPElement origType = adjustment.addChildElement("origType");
+		origType.addAttribute(setQname, "true");
+		origType.addAttribute(changedQname, "true");
 		SOAPElement origTypeValue = origType.addChildElement("value");
 		origTypeValue.addTextNode("0");
 
 		SOAPElement requestStatus = adjustment.addChildElement("requestStatus");
+		requestStatus.addAttribute(changedQname, "true");
+		requestStatus.addAttribute(setQname, "true");
 		SOAPElement requestStatusValue = requestStatus.addChildElement("value");
 		requestStatusValue.addTextNode("1");
 
 		SOAPElement primaryUnitType = adjustment.addChildElement("primaryUnitType");
+		primaryUnitType.addAttribute(setQname, "true");
+		primaryUnitType.addAttribute(changedQname, "true");
 		SOAPElement primaryUnitTypeValue = primaryUnitType.addChildElement("value");
 		primaryUnitTypeValue.addTextNode("403");
 
 		SOAPElement primaryUnits = adjustment.addChildElement("primaryUnits");
+		primaryUnits.addAttribute(setQname, "true");
+		primaryUnits.addAttribute(changedQname, "true");
 		SOAPElement primaryUnitsValue = primaryUnits.addChildElement("value");
 		primaryUnitsValue.addTextNode(vamount);
 
 		SOAPElement transCode = adjustment.addChildElement("transCode");
+		transCode.addAttribute(setQname, "true");
+		transCode.addAttribute(changedQname, "true");
 		SOAPElement transCodeValue = transCode.addChildElement("value");
 		transCodeValue.addTextNode("172");
+		
+		SOAPElement openItemId = adjustment.addChildElement("openItemId");
+			openItemId.addAttribute(setQname, "true");
+			openItemId.addAttribute(changedQname, "true");
+			SOAPElement openItemIdValue = openItemId.addChildElement("value");
+			openItemIdValue.addTextNode("1");
 
 	}// End create Extended Data add envelope
 
@@ -202,7 +213,7 @@ public class PostBillAdj {
 		String message = new String(stream.toByteArray(), "utf-8");
 
 		/* Print the request message, just for debugging purposes */
-		LOGGER.log(Level.FINEST, "Request SOAP Message -->" + message);
+		LOGGER.log(Level.INFO, "Request SOAP Message -->" + message);
 		return soapMessage;
 	}
 
@@ -219,9 +230,9 @@ public class PostBillAdj {
 			 * diot2
 			 */
 
-			String soapEndpointUrl = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapEndpointUrl = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/AdjustmentService";
-			String soapAction = (new BufferedReader(new FileReader("src/Config/sapi.cfg")).readLine())
+			String soapAction = (new BufferedReader(new FileReader("src/config/sapi.cfg")).readLine())
 					+ "/services/AdjustmentService.wsdl";
 
 			// Create SOAP Connection
@@ -238,7 +249,7 @@ public class PostBillAdj {
 			String message = new String(stream.toByteArray());
 
 			// Print the SOAP Response
-			LOGGER.log(Level.FINEST, "Response SOAP..." + message);
+			LOGGER.log(Level.INFO, "Response SOAP..." + message);
 			// System.out.println();
 
 			// Writing to file for further use
@@ -295,7 +306,7 @@ public class PostBillAdj {
 			LOGGER.log(Level.INFO, "--------------------------------------");
 		} catch (Exception e) {
 
-			LOGGER.log(Level.SEVERE, e.toString());
+			LOGGER.log(Level.SEVERE,  "RESULT FAIL: " + e.toString());
 		}
 
 	}
